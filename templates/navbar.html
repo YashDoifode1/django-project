@@ -1,0 +1,29 @@
+<nav class="navbar">
+    <div class="nav-container container">
+        <a href="/" class="logo">AffiliateSite</a>
+
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/">Products</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/contact/">Contact</a></li>
+        </ul>
+
+        <form class="search-form" action="/search/" method="get">
+            <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q|default:'' }}">
+            <select name="type">
+                <option value="products" {% if request.GET.type == "products" %}selected{% endif %}>Products</option>
+                <option value="blog" {% if request.GET.type == "blog" %}selected{% endif %}>Blog</option>
+            </select>
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+
+        <!-- Hamburger Menu for Mobile -->
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</nav>

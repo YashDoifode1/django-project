@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Blog - Affiliate Site{% endblock %}
+
+{% block content %}
+<div class="blog-container container">
+
+    <h1>Blog Posts</h1>
+
+    <div class="blog-list">
+        {% for post in posts %}
+        <div class="blog-card card">
+            <h3><a href="{% url 'blog_detail' post.pk %}">{{ post.title }}</a></h3>
+            <p>{{ post.content|truncatewords:30 }}</p>
+            <a href="{% url 'blog_detail' post.pk %}" class="btn">Read More</a>
+        </div>
+        {% empty %}
+        <p>No blog posts found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

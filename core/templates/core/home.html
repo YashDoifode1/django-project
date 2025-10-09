@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Home - Affiliate Site{% endblock %}
+
+{% block content %}
+<div class="home-container container">
+
+    <!-- Sidebar for Categories -->
+    <aside class="sidebar">
+        <h2>Categories</h2>
+        <ul class="category-list">
+            <li><a href="/products/?category=IT">IT</a></li>
+            <li><a href="/products/?category=Cybersecurity">Cybersecurity</a></li>
+            <li><a href="/products/?category=Data+Science">Data Science</a></li>
+            <li><a href="/products/?category=IoT">IoT</a></li>
+            <li><a href="/blog/?category=Tech">Tech Blogs</a></li>
+            <li><a href="/blog/?category=Guides">Guides</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <section class="main-content-home">
+        <h1>Welcome to Affiliate Site</h1>
+        <p>Find the best products and read insightful blogs.</p>
+
+        <div class="cards">
+            <a href="/products/" class="card">
+                <i class="fas fa-box-open fa-2x"></i>
+                <h3>Explore Products</h3>
+                <p>Discover top-rated products across various categories.</p>
+            </a>
+            <a href="/blog/" class="card">
+                <i class="fas fa-blog fa-2x"></i>
+                <h3>Read Blogs</h3>
+                <p>Learn, explore, and stay updated with our latest blogs.</p>
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}

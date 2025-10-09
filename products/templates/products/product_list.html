@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Products - Affiliate Site{% endblock %}
+
+{% block content %}
+<div class="products-container container">
+
+    <h1>Products</h1>
+
+    <!-- Product Grid -->
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card card">
+            <div class="card-image">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                {% else %}
+                    <img src="{% static 'images/default.jpg' %}" alt="No Image">
+                {% endif %}
+            </div>
+            <div class="card-content">
+                <h3>{{ product.title }}</h3>
+                <p>{{ product.description|truncatewords:20 }}</p>
+                <a href="{{ product.affiliate_link }}" target="_blank" class="btn">Buy Now</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No products available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

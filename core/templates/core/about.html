@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}About Us - Affiliate Site{% endblock %}
+
+{% block content %}
+<div class="about-container container">
+
+    <!-- Hero Section -->
+    <!-- <section class="about-hero">
+        <h1>About Affiliate Site</h1>
+        <p>We provide the best product recommendations and valuable insights through our blog.</p>
+    </section> -->
+
+    <!-- Our Mission / Values -->
+    <section class="about-mission">
+        <h2>Our Mission</h2>
+        <p>Our mission is to help users make informed decisions by providing honest product reviews and insightful blog content in technology, cybersecurity, data science, IoT, and more.</p>
+    </section>
+
+    <!-- Team Section -->
+    <section class="about-team">
+        <h2>Our Team</h2>
+        <div class="team-cards">
+            <div class="team-card">
+                <img src="{% static 'images/team1.jpg' %}" alt="Team Member 1">
+                <h3>John Doe</h3>
+                <p>Founder & CEO</p>
+            </div>
+            <div class="team-card">
+                <img src="{% static 'images/team2.jpg' %}" alt="Team Member 2">
+                <h3>Jane Smith</h3>
+                <p>Content Lead</p>
+            </div>
+            <div class="team-card">
+                <img src="{% static 'images/team3.jpg' %}" alt="Team Member 3">
+                <h3>Mike Johnson</h3>
+                <p>Marketing Lead</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

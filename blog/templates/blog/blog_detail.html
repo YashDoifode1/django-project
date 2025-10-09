@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - Blog{% endblock %}
+
+{% block content %}
+<div class="blog-detail-container container">
+
+    <!-- Main Content -->
+    <div class="blog-detail-content">
+        {% if post.image %}
+        <div class="blog-featured-image">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}">
+        </div>
+        {% endif %}
+
+        <h1>{{ post.title }}</h1>
+        <p class="blog-meta">By {{ post.author }} | {{ post.published_at|date:"F j, Y" }}</p>
+        <div class="blog-body">
+            {{ post.content|linebreaks }}
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="blog-sidebar">
+        <h2>Categories</h2>
+        <ul class="category-list">
+            <li><a href="{% url 'blog_list' %}?category=Tech">Tech</a></li>
+            <li><a href="{% url 'blog_list' %}?category=Guides">Guides</a></li>
+            <li><a href="{% url 'blog_list' %}?category=Reviews">Reviews</a></li>
+        </ul>
+
+        <h2>Recent Posts</h2>
+        <ul class="recent-posts">
+            {% for recent in recent_posts %}
+            <li><a href="{% url 'blog_detail' recent.pk %}">{{ recent.title|truncatewords:5 }}</a></li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+</div>
+{% endblock %}

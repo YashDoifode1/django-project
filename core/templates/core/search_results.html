@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="search-container container">
+
+    <!-- Sidebar for Categories -->
+    <aside class="sidebar">
+        <h2>Categories</h2>
+        <ul class="category-list">
+            <li><a href="/products/?category=IT">IT</a></li>
+            <li><a href="/products/?category=Cybersecurity">Cybersecurity</a></li>
+            <li><a href="/products/?category=Data+Science">Data Science</a></li>
+            <li><a href="/products/?category=IoT">IoT</a></li>
+            <li><a href="/blog/?category=Tech">Tech Blogs</a></li>
+            <li><a href="/blog/?category=Guides">Guides</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Search Results -->
+    <section class="search-results-section">
+        <h1>Search Results</h1>
+
+        {% if query %}
+            <p>Results for "<strong>{{ query }}</strong>" in {{ search_type|title }}:</p>
+        {% endif %}
+
+        <div class="search-results">
+            {% if results %}
+                {% for item in results %}
+                    {% if search_type == 'products' %}
+                        <div class="product-card card">
+                            <div class="card-image">
+                                {% if item.image %}
+                                    <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                                {% else %}
+                                    <img src="{% static 'images/default.jpg' %}" alt="No Image">
+                                {% endif %}
+                            </div>
+                            <div class="card-content">
+                                <h3>{{ item.title }}</h3>
+                                <p>{{ item.description|truncatewords:20 }}</p>
+                                <a href="{{ item.affiliate_link }}" target="_blank" class="btn">Buy Now</a>
+                            </div>
+                        </div>
+                    {% elif search_type == 'blog' %}
+                        <div class="blog-card card">
+                            <h3><a href="{% url 'blog_detail' item.pk %}">{{ item.title }}</a></h3>
+                            <p>{{ item.content|truncatewords:30 }}</p>
+                            <a href="{% url 'blog_detail' item.pk %}" class="btn">Read More</a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No results found.</p>
+            {% endif %}
+        </div>
+    </section>
+
+</div>
+{% endblock %}

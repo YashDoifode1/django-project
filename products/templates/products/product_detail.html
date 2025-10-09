@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.title }} - Affiliate Site{% endblock %}
+
+{% block content %}
+<div class="product-detail-container container">
+
+    <div class="product-detail-card">
+        <!-- Product Image -->
+        <div class="product-image">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.title }}">
+            {% else %}
+                <img src="{% static 'images/default.jpg' %}" alt="No Image">
+            {% endif %}
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-info">
+            <h1>{{ product.title }}</h1>
+            <p>{{ product.description }}</p>
+            <a href="{{ product.affiliate_link }}" target="_blank" class="btn">Buy Now</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
