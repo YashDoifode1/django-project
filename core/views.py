@@ -1,18 +1,35 @@
 from django.shortcuts import render
-from products.models import Category, Product
-from blog.models import BlogPost
+from django.core.paginator import Paginator
+from products.models import Product, Category as ProductCategory
+from blog.models import BlogPost, BlogCategory
 
 def home(request):
-    product_categories = Category.objects.all()
-    latest_products = Product.objects.order_by('-id')[:4]
-    latest_blogs = BlogPost.objects.order_by('-id')[:4]
+    # Fetch categories
+    product_categories = ProductCategory.objects.all()
+    blog_categories = BlogCategory.objects.all()
+
+    # Fetch products and blogs
+    product_list = Product.objects.all()
+    blog_list = BlogPost.objects.all()
+
+    # Pagination for products (4 per page, 2x2 grid)
+    product_paginator = Paginator(product_list, 4)
+    product_page_number = request.GET.get('product_page')
+    products = product_paginator.get_page(product_page_number)
+
+    # Pagination for blogs (4 per page, 2x2 grid)
+    blog_paginator = Paginator(blog_list, 4)
+    blog_page_number = request.GET.get('blog_page')
+    blogs = blog_paginator.get_page(blog_page_number)
 
     context = {
         'product_categories': product_categories,
-        'latest_products': latest_products,
-        'latest_blogs': latest_blogs
+        'blog_categories': blog_categories,
+        'products': products,
+        'blogs': blogs,
     }
     return render(request, 'core/home.html', context)
+
 
 
 def about(request):

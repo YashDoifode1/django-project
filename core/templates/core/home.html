@@ -1,21 +1,23 @@
 {% extends 'base.html' %}
-{% load static %}
-
 {% block title %}Home - Affiliate Site{% endblock %}
 
 {% block content %}
 <div class="home-container container">
 
-    <!-- Sidebar for Categories -->
+    <!-- Sidebar -->
     <aside class="sidebar">
-        <h2>Categories</h2>
+        <h2>Product Categories</h2>
         <ul class="category-list">
-            <li><a href="{% url 'products:product_list' %}?category=IT">IT</a></li>
-            <li><a href="{% url 'products:product_list' %}?category=Cybersecurity">Cybersecurity</a></li>
-            <li><a href="{% url 'products:product_list' %}?category=Data+Science">Data Science</a></li>
-            <li><a href="{% url 'products:product_list' %}?category=IoT">IoT</a></li>
-            <li><a href="{% url 'blog:blog_list' %}?category=Tech">Tech Blogs</a></li>
-            <li><a href="{% url 'blog:blog_list' %}?category=Guides">Guides</a></li>
+            {% for category in product_categories %}
+            <li><a href="{% url 'products:product_list' %}?category={{ category.name }}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h2>Blog Categories</h2>
+        <ul class="category-list">
+            {% for category in blog_categories %}
+            <li><a href="{% url 'blog:blog_list' %}?category={{ category.name }}">{{ category.name }}</a></li>
+            {% endfor %}
         </ul>
     </aside>
 
@@ -23,27 +25,328 @@
     <section class="main-content-home">
         <div class="hero">
             <h1>Welcome to Affiliate Site</h1>
-            <p>Your go-to platform for curated products and insightful blogs in the tech world.</p>
+            <p>Discover top products and insightful blogs.</p>
         </div>
 
-        <div class="cards">
-            <a href="{% url 'products:product_list' %}" class="card">
-                <i class="fas fa-box-open fa-2x"></i>
-                <h3>Explore Products</h3>
-                <p>Discover high-quality tech products across IT, Data Science, IoT, and more.</p>
-            </a>
-            <a href="{% url 'blog:blog_list' %}" class="card">
-                <i class="fas fa-blog fa-2x"></i>
-                <h3>Read Blogs</h3>
-                <p>Stay informed with expert-written blogs and tech guides for professionals.</p>
-            </a>
+        <!-- Product Cards -->
+        <h2 class="section-title">Featured Products</h2>
+        <div class="cards grid-3x3">
+            {% for product in products %}
+            <div class="card">
+                <a href="{{ product.affiliate_link }}" target="_blank">
+                    <div class="card-image">
+                        <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                    </div>
+                    <div class="card-content">
+                        <h3>{{ product.title }}</h3>
+                        <p>{{ product.description|truncatewords:15 }}</p>
+                        <span class="card-link">View Product →</span>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Product Pagination -->
+        <div class="pagination">
+            {% if products.has_previous %}
+                <a href="?product_page={{ products.previous_page_number }}" class="pagination-btn">Previous</a>
+            {% endif %}
+            <span class="pagination-info">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+            {% if products.has_next %}
+                <a href="?product_page={{ products.next_page_number }}" class="pagination-btn">Next</a>
+            {% endif %}
         </div>
 
-        <div class="cta-section">
-            <h2>Want to collaborate?</h2>
-            <p>Contact us to feature your product or share your story on our platform.</p>
-            <a href="{% url 'contact' %}" class="btn-cta">Get in Touch</a>
+        <!-- Blog Cards -->
+        <h2 class="section-title">Latest Blogs</h2>
+        <div class="cards grid-3x3">
+            {% for blog in blogs %}
+            <div class="card">
+                <a href="{% url 'blog:blog_detail' blog.pk %}">
+                    <div class="card-content">
+                        <h3>{{ blog.title }}</h3>
+                        <p>{{ blog.content|truncatewords:20 }}</p>
+                        <span class="card-link">Read More →</span>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Blog Pagination -->
+        <div class="pagination">
+            {% if blogs.has_previous %}
+                <a href="?blog_page={{ blogs.previous_page_number }}" class="pagination-btn">Previous</a>
+            {% endif %}
+            <span class="pagination-info">Page {{ blogs.number }} of {{ blogs.paginator.num_pages }}</span>
+            {% if blogs.has_next %}
+                <a href="?blog_page={{ blogs.next_page_number }}" class="pagination-btn">Next</a>
+            {% endif %}
         </div>
     </section>
 </div>
+
+<style>
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Home Container */
+.home-container {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+/* Sidebar */
+.sidebar {
+    flex: 0 0 250px;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.category-list {
+    list-style: none;
+    margin-bottom: 25px;
+}
+
+.category-list li {
+    margin-bottom: 8px;
+}
+
+.category-list a {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.3s;
+    display: block;
+    padding: 5px 0;
+}
+
+.category-list a:hover {
+    color: #3498db;
+}
+
+/* Main Content */
+.main-content-home {
+    flex: 1;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    color: white;
+    padding: 50px 40px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 1.8rem;
+    margin: 40px 0 20px;
+    color: #2c3e50;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: #3498db;
+}
+
+/* Cards Grid */
+.cards.grid-3x3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+/* Card Styles */
+.card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-image {
+    height: 180px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.card:hover .card-image img {
+    transform: scale(1.05);
+}
+
+.card-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    line-height: 1.4;
+}
+
+.card p {
+    color: #666;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.card-link {
+    color: #3498db;
+    font-weight: 600;
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.card:hover .card-link {
+    transform: translateX(5px);
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    gap: 15px;
+}
+
+.pagination-btn {
+    background: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.pagination-btn:hover {
+    background: #2980b9;
+}
+
+.pagination-info {
+    color: #666;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .cards.grid-3x3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .home-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        position: static;
+        margin-bottom: 30px;
+    }
+    
+    .cards.grid-3x3 {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pagination {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .hero {
+        padding: 30px 20px;
+    }
+}
+</style>
 {% endblock %}
