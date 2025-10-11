@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Home - Affiliate Site{% endblock %}
 
 {% block content %}
@@ -8,31 +10,39 @@
     <aside class="sidebar">
         <h2>Categories</h2>
         <ul class="category-list">
-            <li><a href="/products/?category=IT">IT</a></li>
-            <li><a href="/products/?category=Cybersecurity">Cybersecurity</a></li>
-            <li><a href="/products/?category=Data+Science">Data Science</a></li>
-            <li><a href="/products/?category=IoT">IoT</a></li>
-            <li><a href="/blog/?category=Tech">Tech Blogs</a></li>
-            <li><a href="/blog/?category=Guides">Guides</a></li>
+            <li><a href="{% url 'products:product_list' %}?category=IT">IT</a></li>
+            <li><a href="{% url 'products:product_list' %}?category=Cybersecurity">Cybersecurity</a></li>
+            <li><a href="{% url 'products:product_list' %}?category=Data+Science">Data Science</a></li>
+            <li><a href="{% url 'products:product_list' %}?category=IoT">IoT</a></li>
+            <li><a href="{% url 'blog:blog_list' %}?category=Tech">Tech Blogs</a></li>
+            <li><a href="{% url 'blog:blog_list' %}?category=Guides">Guides</a></li>
         </ul>
     </aside>
 
     <!-- Main Content -->
     <section class="main-content-home">
-        <h1>Welcome to Affiliate Site</h1>
-        <p>Find the best products and read insightful blogs.</p>
+        <div class="hero">
+            <h1>Welcome to Affiliate Site</h1>
+            <p>Your go-to platform for curated products and insightful blogs in the tech world.</p>
+        </div>
 
         <div class="cards">
-            <a href="/products/" class="card">
+            <a href="{% url 'products:product_list' %}" class="card">
                 <i class="fas fa-box-open fa-2x"></i>
                 <h3>Explore Products</h3>
-                <p>Discover top-rated products across various categories.</p>
+                <p>Discover high-quality tech products across IT, Data Science, IoT, and more.</p>
             </a>
-            <a href="/blog/" class="card">
+            <a href="{% url 'blog:blog_list' %}" class="card">
                 <i class="fas fa-blog fa-2x"></i>
                 <h3>Read Blogs</h3>
-                <p>Learn, explore, and stay updated with our latest blogs.</p>
+                <p>Stay informed with expert-written blogs and tech guides for professionals.</p>
             </a>
+        </div>
+
+        <div class="cta-section">
+            <h2>Want to collaborate?</h2>
+            <p>Contact us to feature your product or share your story on our platform.</p>
+            <a href="{% url 'contact' %}" class="btn-cta">Get in Touch</a>
         </div>
     </section>
 </div>

@@ -1,7 +1,19 @@
 from django.shortcuts import render
+from products.models import Category, Product
+from blog.models import BlogPost
 
 def home(request):
-    return render(request, 'core/home.html')
+    product_categories = Category.objects.all()
+    latest_products = Product.objects.order_by('-id')[:4]
+    latest_blogs = BlogPost.objects.order_by('-id')[:4]
+
+    context = {
+        'product_categories': product_categories,
+        'latest_products': latest_products,
+        'latest_blogs': latest_blogs
+    }
+    return render(request, 'core/home.html', context)
+
 
 def about(request):
     return render(request, 'core/about.html')
