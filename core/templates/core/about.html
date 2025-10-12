@@ -1,44 +1,786 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block title %}About Us - Affiliate Site{% endblock %}
 
 {% block content %}
 <div class="about-container container">
 
     <!-- Hero Section -->
-    <!-- <section class="about-hero">
-        <h1>About Affiliate Site</h1>
-        <p>We provide the best product recommendations and valuable insights through our blog.</p>
-    </section> -->
-
-    <!-- Our Mission / Values -->
-    <section class="about-mission">
-        <h2>Our Mission</h2>
-        <p>Our mission is to help users make informed decisions by providing honest product reviews and insightful blog content in technology, cybersecurity, data science, IoT, and more.</p>
-    </section>
-
-    <!-- Team Section -->
-    <section class="about-team">
-        <h2>Our Team</h2>
-        <div class="team-cards">
-            <div class="team-card">
-                <img src="{% static 'images/team1.jpg' %}" alt="Team Member 1">
-                <h3>John Doe</h3>
-                <p>Founder & CEO</p>
+    <section class="about-hero">
+        <div class="hero-content">
+            <h1 class="hero-title">About TechAffiliate</h1>
+            <p class="hero-subtitle">Your Trusted Guide in the World of Technology</p>
+            <p class="hero-description">
+                We bridge the gap between cutting-edge technology and everyday users by providing 
+                honest reviews, expert insights, and valuable resources to help you make informed decisions.
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Products Reviewed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Happy Readers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5+</span>
+                    <span class="stat-label">Years Experience</span>
+                </div>
             </div>
-            <div class="team-card">
-                <img src="{% static 'images/team2.jpg' %}" alt="Team Member 2">
-                <h3>Jane Smith</h3>
-                <p>Content Lead</p>
-            </div>
-            <div class="team-card">
-                <img src="{% static 'images/team3.jpg' %}" alt="Team Member 3">
-                <h3>Mike Johnson</h3>
-                <p>Marketing Lead</p>
+        </div>
+        <div class="hero-visual">
+            <div class="visual-graphic">
+                <div class="graphic-item primary">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <div class="graphic-item secondary">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="graphic-item accent">
+                    <i class="fas fa-chart-line"></i>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- Mission & Vision -->
+    <section class="mission-vision">
+        <div class="mission-card">
+            <div class="card-icon">
+                <i class="fas fa-bullseye"></i>
+            </div>
+            <h3>Our Mission</h3>
+            <p>
+                To empower technology enthusiasts and professionals with unbiased, comprehensive 
+                product reviews and educational content that simplifies complex tech concepts and 
+                drives informed purchasing decisions.
+            </p>
+        </div>
+        <div class="vision-card">
+            <div class="card-icon">
+                <i class="fas fa-eye"></i>
+            </div>
+            <h3>Our Vision</h3>
+            <p>
+                To become the most trusted technology affiliate platform globally, recognized for 
+                our integrity, expertise, and commitment to helping people navigate the ever-evolving 
+                tech landscape.
+            </p>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+        <div class="section-header">
+            <h2>Our Core Values</h2>
+            <p>The principles that guide everything we do</p>
+        </div>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h4>Integrity</h4>
+                <p>We maintain complete transparency in our reviews and recommendations, ensuring our readers always get honest, unbiased information.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h4>Expertise</h4>
+                <p>Our team consists of industry professionals with years of experience in technology, cybersecurity, and digital innovation.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h4>Community</h4>
+                <p>We believe in building a strong tech community where knowledge is shared and everyone can grow together.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <h4>Innovation</h4>
+                <p>We continuously evolve our content and approach to stay at the forefront of technology trends and developments.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="section-header">
+            <h2>Meet Our Team</h2>
+            <p>The passionate experts behind TechAffiliate</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'images/team1.jpg' %}" alt="John Doe">
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>John Doe</h3>
+                    <p class="team-role">Founder & CEO</p>
+                    <p class="team-bio">
+                        Former cybersecurity analyst with 10+ years of experience in tech industry. 
+                        Passionate about making technology accessible to everyone.
+                    </p>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'images/team2.jpg' %}" alt="Jane Smith">
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-medium"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Jane Smith</h3>
+                    <p class="team-role">Content Director</p>
+                    <p class="team-bio">
+                        Tech journalist and content strategist specializing in IoT and smart home 
+                        technologies. Loves breaking down complex topics for beginners.
+                    </p>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'images/team3.jpg' %}" alt="Mike Johnson">
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Mike Johnson</h3>
+                    <p class="team-role">Lead Product Reviewer</p>
+                    <p class="team-bio">
+                        Data scientist and hardware enthusiast with deep expertise in performance 
+                        testing and benchmarking. Never met a gadget he didn't want to test.
+                    </p>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'images/team4.jpg' %}" alt="Sarah Chen">
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Sarah Chen</h3>
+                    <p class="team-role">Cybersecurity Expert</p>
+                    <p class="team-bio">
+                        Ethical hacker and security consultant focused on helping individuals and 
+                        businesses stay safe in the digital world. Certified CISSP professional.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-choose-us">
+        <div class="section-header">
+            <h2>Why Trust TechAffiliate?</h2>
+            <p>What sets us apart in the crowded tech space</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Rigorous Testing</h4>
+                    <p>Every product undergoes extensive hands-on testing in real-world scenarios before we recommend it.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Unbiased Reviews</h4>
+                    <p>We maintain editorial independence and never let affiliate relationships influence our recommendations.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-sync"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Regular Updates</h4>
+                    <p>Our content is constantly updated to reflect the latest products, prices, and market changes.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-life-ring"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Expert Support</h4>
+                    <p>Have questions? Our team of experts is here to help you make the right choice for your needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <!-- <section class="cta-section">
+        <div class="cta-content">
+            <h2>Join Our Tech Community</h2>
+            <p>Stay updated with the latest product reviews, tech insights, and exclusive deals</p>
+            <div class="cta-actions">
+                <a href="{% url 'blog:blog_list' %}" class="btn btn-primary">
+                    <i class="fas fa-book-open"></i>
+                    Read Our Blog
+                </a>
+                <a href="{% url 'products:product_list' %}" class="btn btn-outline">
+                    <i class="fas fa-shopping-bag"></i>
+                    Browse Products
+                </a>
+            </div>
+        </div>
+    </section> -->
+
 </div>
+
+<style>
+/* About Container */
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Hero Section */
+.about-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    margin-bottom: 80px;
+    padding: 60px 0;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: var(--gray-medium);
+    line-height: 1.7;
+    margin-bottom: 40px;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 40px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--gray-medium);
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.visual-graphic {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+.graphic-item {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+    box-shadow: var(--box-shadow-lg);
+    transition: transform 0.3s ease;
+}
+
+.graphic-item.primary {
+    background: linear-gradient(135deg, var(--primary-color), #2980b9);
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.graphic-item.secondary {
+    background: linear-gradient(135deg, var(--secondary-color), #1a252f);
+    bottom: 40px;
+    left: 0;
+}
+
+.graphic-item.accent {
+    background: linear-gradient(135deg, var(--accent-color), #c0392b);
+    bottom: 40px;
+    right: 0;
+}
+
+.visual-graphic:hover .graphic-item.primary {
+    transform: translateX(-50%) translateY(-10px);
+}
+
+.visual-graphic:hover .graphic-item.secondary {
+    transform: translateX(-10px) translateY(-10px);
+}
+
+.visual-graphic:hover .graphic-item.accent {
+    transform: translateX(10px) translateY(-10px);
+}
+
+/* Mission & Vision */
+.mission-vision {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 80px;
+}
+
+.mission-card,
+.vision-card {
+    background: white;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.mission-card:hover,
+.vision-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.card-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    color: white;
+    font-size: 2rem;
+}
+
+.mission-card h3,
+.vision-card h3 {
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.mission-card p,
+.vision-card p {
+    color: var(--gray-medium);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Section Headers */
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+.section-header p {
+    font-size: 1.1rem;
+    color: var(--gray-medium);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Values Section */
+.values-section {
+    margin-bottom: 80px;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.value-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.value-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.value-icon {
+    width: 70px;
+    height: 70px;
+    background: var(--light-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    transition: var(--transition);
+}
+
+.value-card:hover .value-icon {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.value-card h4 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.value-card p {
+    color: var(--gray-medium);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Team Section */
+.team-section {
+    margin-bottom: 80px;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.team-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.team-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.team-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.team-card:hover .team-image img {
+    transform: scale(1.1);
+}
+
+.team-social {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.team-card:hover .team-social {
+    opacity: 1;
+}
+
+.team-social a {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.team-social a:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.team-info {
+    padding: 25px;
+    text-align: center;
+}
+
+.team-info h3 {
+    color: var(--secondary-color);
+    margin-bottom: 5px;
+    font-size: 1.3rem;
+}
+
+.team-role {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.team-bio {
+    color: var(--gray-medium);
+    line-height: 1.6;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Why Choose Us */
+.why-choose-us {
+    margin-bottom: 80px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    background: white;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--light-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.feature-card:hover .feature-icon {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.feature-content h4 {
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.feature-content p {
+    color: var(--gray-medium);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: var(--border-radius);
+    padding: 60px 40px;
+    text-align: center;
+    color: white;
+}
+
+.cta-content h2 {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 2.2rem;
+}
+
+.cta-content p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .about-hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .hero-stats {
+        justify-content: center;
+    }
+    
+    .mission-vision {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-container {
+        padding: 30px 15px;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .visual-graphic {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .graphic-item {
+        width: 100px;
+        height: 100px;
+        font-size: 2rem;
+    }
+    
+    .section-header h2 {
+        font-size: 2rem;
+    }
+    
+    .mission-card,
+    .vision-card {
+        padding: 30px 20px;
+    }
+    
+    .feature-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .cta-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-section {
+        padding: 40px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .values-grid,
+    .team-grid,
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-image {
+        height: 200px;
+    }
+}
+</style>
 {% endblock %}

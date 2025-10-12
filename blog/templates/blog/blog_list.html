@@ -4,19 +4,515 @@
 {% block content %}
 <div class="blog-container container">
 
-    <h1>Blog Posts</h1>
+    <!-- Page Header -->
+    <section class="blog-header">
+        <h1>Our Blog</h1>
+        <p class="blog-subtitle">Discover insightful articles, guides, and latest trends in technology</p>
+    </section>
 
-    <div class="blog-list">
+    <!-- Blog Grid -->
+    <div class="blog-grid grid-3x3">
         {% for post in posts %}
-        <div class="blog-card card">
-           <h3><a href="{% url 'blog:blog_detail' post.pk %}">{{ post.title }}</a></h3>
-<p>{{ post.content|truncatewords:30 }}</p>
-<a href="{% url 'blog:blog_detail' post.pk %}" class="btn">Read More</a>
-
-        </div>
+        <article class="blog-card card">
+            <div class="card-image">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                {% else %}
+                    <div class="card-image-placeholder">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                {% endif %}
+                <div class="card-category">
+                    {% if post.category %}
+                        <span class="category-tag">{{ post.category.name }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card-content">
+                <div class="card-meta">
+                    <span class="publish-date">
+                        <i class="far fa-calendar"></i>
+                        {{ post.created_at|date:"M j, Y" }}
+                    </span>
+                    {% if post.read_time %}
+                    <span class="read-time">
+                        <i class="far fa-clock"></i>
+                        {{ post.read_time }} min read
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <h3 class="card-title">
+                    <a href="{% url 'blog:blog_detail' post.pk %}">{{ post.title }}</a>
+                </h3>
+                
+                <p class="card-excerpt">{{ post.content|striptags|truncatewords:25 }}</p>
+                
+                <div class="card-footer">
+                    <a href="{% url 'blog:blog_detail' post.pk %}" class="btn btn-outline">
+                        Read More
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </article>
         {% empty %}
-        <p>No blog posts found.</p>
+        <div class="no-posts">
+            <div class="no-posts-icon">
+                <i class="fas fa-pencil-alt"></i>
+            </div>
+            <h3>No Blog Posts Yet</h3>
+            <p>Check back later for new articles and updates.</p>
+        </div>
         {% endfor %}
     </div>
+
+    <!-- Pagination -->
+    {% if posts.has_other_pages %}
+    <div class="pagination">
+        {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}" class="pagination-btn">
+                <i class="fas fa-chevron-left"></i>
+                Previous
+            </a>
+        {% else %}
+            <span class="pagination-btn disabled">
+                <i class="fas fa-chevron-left"></i>
+                Previous
+            </span>
+        {% endif %}
+
+        <div class="pagination-pages">
+            {% for i in posts.paginator.page_range %}
+                {% if posts.number == i %}
+                    <span class="pagination-page active">{{ i }}</span>
+                {% else %}
+                    <a href="?page={{ i }}" class="pagination-page">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}" class="pagination-btn">
+                Next
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        {% else %}
+            <span class="pagination-btn disabled">
+                Next
+                <i class="fas fa-chevron-right"></i>
+            </span>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Newsletter Section -->
+    <!-- <section class="newsletter-section">
+        <div class="newsletter-content">
+            <div class="newsletter-text">
+                <h2>Stay Updated</h2>
+                <p>Get the latest blog posts and tech insights delivered to your inbox.</p>
+            </div>
+            <form class="newsletter-form">
+                <div class="form-group">
+                    <input type="email" placeholder="Enter your email" class="form-control" required>
+                    <button type="submit" class="btn btn-primary">
+                        Subscribe
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section> -->
+
 </div>
+
+<style>
+/* Blog Container */
+.blog-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Blog Header */
+.blog-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.blog-header h1 {
+    font-size: 3rem;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.blog-subtitle {
+    font-size: 1.2rem;
+    color: var(--gray-medium);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Blog Grid */
+.blog-grid.grid-3x3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+/* Blog Card Enhancements */
+.blog-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.blog-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.blog-card:hover .card-image img {
+    transform: scale(1.1);
+}
+
+.card-image-placeholder {
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.card-image-placeholder i {
+    font-size: 3rem;
+    opacity: 0.8;
+}
+
+.card-category {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.category-tag {
+    background: var(--primary-color);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-content {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    color: var(--gray-medium);
+}
+
+.publish-date,
+.read-time {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.publish-date i,
+.read-time i {
+    font-size: 0.8rem;
+}
+
+.card-title {
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.card-title a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.card-title a:hover {
+    color: var(--primary-color);
+}
+
+.card-excerpt {
+    color: var(--gray-medium);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.card-footer {
+    margin-top: auto;
+}
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-outline:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateX(5px);
+}
+
+/* No Posts State */
+.no-posts {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.no-posts-icon {
+    font-size: 4rem;
+    color: var(--gray-light);
+    margin-bottom: 20px;
+}
+
+.no-posts h3 {
+    color: var(--gray-medium);
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.no-posts p {
+    color: var(--gray-medium);
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: var(--border-radius);
+    padding: 50px;
+    margin-top: 40px;
+    color: white;
+}
+
+.newsletter-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.newsletter-text h2 {
+    color: white;
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.newsletter-text p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+.newsletter-form {
+    flex: 0 0 400px;
+}
+
+.newsletter-form .form-group {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+}
+
+.newsletter-form .form-control {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    border-radius: var(--border-radius);
+}
+
+.newsletter-form .btn {
+    white-space: nowrap;
+}
+
+/* Pagination Enhancements */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 50px 0;
+    padding-top: 30px;
+    border-top: 1px solid var(--gray-light);
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: var(--primary-color);
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+    border: 1px solid var(--gray-light);
+}
+
+.pagination-btn:hover:not(.disabled) {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.pagination-btn.disabled {
+    color: var(--gray-medium);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.pagination-pages {
+    display: flex;
+    gap: 8px;
+}
+
+.pagination-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--gray-medium);
+    font-weight: 500;
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.pagination-page.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.pagination-page:not(.active):hover {
+    background: var(--light-color);
+    color: var(--primary-color);
+    border-color: var(--gray-light);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .blog-grid.grid-3x3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .newsletter-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+    
+    .newsletter-form {
+        flex: none;
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-container {
+        padding: 30px 15px;
+    }
+    
+    .blog-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .blog-grid.grid-3x3 {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .newsletter-section {
+        padding: 40px 30px;
+    }
+    
+    .pagination {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .card-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-header h1 {
+        font-size: 2rem;
+    }
+    
+    .blog-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .card-content {
+        padding: 20px;
+    }
+    
+    .newsletter-section {
+        padding: 30px 20px;
+    }
+    
+    .newsletter-form .form-group {
+        flex-direction: column;
+    }
+}
+</style>
 {% endblock %}

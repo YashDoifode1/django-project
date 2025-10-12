@@ -24,10 +24,16 @@
         <h1>Search Results</h1>
 
         {% if query %}
-            <p>Results for "<strong>{{ query }}</strong>" in {{ search_type|title }}:</p>
+            <p class="search-query">Results for "<strong>{{ query }}</strong>" in {{ search_type|title }}:</p>
         {% endif %}
 
-        <div class="search-results">
+        <!-- Search Type Tabs -->
+        <div class="search-tabs">
+            <a href="?q={{ query }}&type=products" class="tab {% if search_type == 'products' %}active{% endif %}">Products</a>
+            <a href="?q={{ query }}&type=blog" class="tab {% if search_type == 'blog' %}active{% endif %}">Blog Posts</a>
+        </div>
+
+        <div class="search-results grid-3x3">
             {% if results %}
                 {% for item in results %}
                     {% if search_type == 'products' %}
@@ -42,22 +48,416 @@
                             <div class="card-content">
                                 <h3>{{ item.title }}</h3>
                                 <p>{{ item.description|truncatewords:20 }}</p>
-                                <a href="{{ item.affiliate_link }}" target="_blank" class="btn">Buy Now</a>
+                                <div class="card-footer">
+                                    <a href="{{ item.affiliate_link }}" target="_blank" class="btn btn-primary">Buy Now</a>
+                                </div>
                             </div>
                         </div>
                     {% elif search_type == 'blog' %}
                         <div class="blog-card card">
-                            <h3><a href="{% url 'blog_detail' item.pk %}">{{ item.title }}</a></h3>
-                            <p>{{ item.content|truncatewords:30 }}</p>
-                            <a href="{% url 'blog_detail' item.pk %}" class="btn">Read More</a>
+                            <div class="card-content">
+                                <h3><a href="{% url 'blog_detail' item.pk %}">{{ item.title }}</a></h3>
+                                <p>{{ item.content|truncatewords:30 }}</p>
+                                <div class="card-footer">
+                                    <a href="{% url 'blog_detail' item.pk %}" class="btn btn-secondary">Read More</a>
+                                </div>
+                            </div>
                         </div>
                     {% endif %}
                 {% endfor %}
             {% else %}
-                <p>No results found.</p>
+                <div class="no-results">
+                    <img src="{% static 'images/no-results.svg' %}" alt="No results found" class="no-results-img">
+                    <h3>No results found</h3>
+                    <p>Try adjusting your search terms or browse the categories.</p>
+                </div>
             {% endif %}
         </div>
+
+        <!-- Pagination -->
+        {% if results.has_other_pages %}
+        <div class="pagination">
+            {% if results.has_previous %}
+                <a href="?q={{ query }}&type={{ search_type }}&page={{ results.previous_page_number }}" class="pagination-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Previous
+                </a>
+            {% endif %}
+
+            <div class="pagination-pages">
+                {% for i in results.paginator.page_range %}
+                    {% if results.number == i %}
+                        <span class="pagination-page active">{{ i }}</span>
+                    {% else %}
+                        <a href="?q={{ query }}&type={{ search_type }}&page={{ i }}" class="pagination-page">{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if results.has_next %}
+                <a href="?q={{ query }}&type={{ search_type }}&page={{ results.next_page_number }}" class="pagination-btn">
+                    Next
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            {% endif %}
+        </div>
+        {% endif %}
     </section>
 
 </div>
+
+<style>
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Search Container */
+.search-container {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+/* Sidebar */
+.sidebar {
+    flex: 0 0 250px;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.category-list {
+    list-style: none;
+}
+
+.category-list li {
+    margin-bottom: 8px;
+}
+
+.category-list a {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.3s;
+    display: block;
+    padding: 8px 0;
+    border-radius: 4px;
+}
+
+.category-list a:hover {
+    color: #3498db;
+    background-color: #f8f9fa;
+}
+
+/* Search Results Section */
+.search-results-section {
+    flex: 1;
+}
+
+.search-results-section h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.search-query {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    color: #666;
+}
+
+/* Search Tabs */
+.search-tabs {
+    display: flex;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tab {
+    padding: 12px 24px;
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+}
+
+.tab.active {
+    color: #3498db;
+    border-bottom-color: #3498db;
+}
+
+.tab:hover {
+    color: #3498db;
+    background-color: #f8f9fa;
+}
+
+/* Search Results Grid */
+.search-results.grid-3x3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+/* Card Styles */
+.card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-image {
+    height: 180px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.card:hover .card-image img {
+    transform: scale(1.05);
+}
+
+.card-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    line-height: 1.4;
+}
+
+.card h3 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card h3 a:hover {
+    color: #3498db;
+}
+
+.card p {
+    color: #666;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.card-footer {
+    margin-top: auto;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.btn-secondary {
+    background: #2c3e50;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #1a252f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(44, 62, 80, 0.3);
+}
+
+/* No Results */
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.no-results-img {
+    max-width: 200px;
+    margin-bottom: 20px;
+    opacity: 0.7;
+}
+
+.no-results h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.no-results p {
+    color: #888;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: #3498db;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: 1px solid #e0e0e0;
+}
+
+.pagination-btn:hover {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.pagination-pages {
+    display: flex;
+    gap: 5px;
+}
+
+.pagination-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.pagination-page.active {
+    background: #3498db;
+    color: white;
+}
+
+.pagination-page:not(.active):hover {
+    background: #f8f9fa;
+    color: #3498db;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .search-results.grid-3x3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        position: static;
+        margin-bottom: 30px;
+    }
+    
+    .search-results.grid-3x3 {
+        grid-template-columns: 1fr;
+    }
+    
+    .pagination {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .search-tabs {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-results-section h1 {
+        font-size: 1.7rem;
+    }
+    
+    .card-content {
+        padding: 15px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
+</style>
 {% endblock %}
