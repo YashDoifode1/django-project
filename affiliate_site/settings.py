@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'products',
     'blog',
+    'accounts',
 ]
 
 
@@ -137,3 +138,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'templates')]
+
+
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']

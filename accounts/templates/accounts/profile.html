@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Profile - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>{{ user.username }}'s Profile</h2>
+    <img src="{{ profile.profile_image.url }}" alt="Profile Picture" class="profile-pic">
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Bio:</strong> {{ profile.bio|default:"No bio yet." }}</p>
+    <p><strong>Website:</strong> 
+        {% if profile.website %}
+            <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a>
+        {% else %}
+            Not provided
+        {% endif %}
+    </p>
+    <p><strong>Location:</strong> {{ profile.location|default:"Unknown" }}</p>
+
+    <a href="{% url 'accounts:edit_profile' %}" class="btn">Edit Profile</a>
+</div>
+{% endblock %}

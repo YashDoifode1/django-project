@@ -1294,6 +1294,28 @@ body {
 }
 
 /* ------------------------------------------------------------------------------------------------ */
+.error-container {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.error-container h1 {
+    font-size: 3rem;
+    color: #ff4444;
+}
+
+.error-container p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.error-container .btn {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+}
 
 /* ------------------------------------------------------------------------------------------------ */
 

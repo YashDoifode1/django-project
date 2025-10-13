@@ -1,0 +1,10 @@
+
+{% block title %}Bad Request - 400{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <h1>400 - Bad Request</h1>
+    <p>Your request couldn’t be processed. Please check and try again.</p>
+    <a href="{% url 'home' %}" class="btn">Return Home</a>
+</div>
+{% endblock %}
