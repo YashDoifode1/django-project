@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'products',
     'blog',
+    'accounts'
 ]
 
 
@@ -137,3 +138,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'templates')]
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'

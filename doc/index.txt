@@ -1,0 +1,408 @@
+Affiliate Site — Project Documentation
+Overview
+
+Project name: affiliate_site
+Purpose: Affiliate product listing + blog site with categories, search, pagination, user accounts, and profiles.
+Apps: core, products, blog, accounts
+Stack: Django (5.x), SQLite (dev), static + media for assets.
+
+affiliate_site/                 # project settings
+  ├─ settings.py
+  ├─ urls.py
+  └─ wsgi.py / asgi.py
+
+manage.py
+db.sqlite3
+requirements.txt
+
+core/                           # static pages + home, search + contact
+  ├─ views.py
+  ├─ urls.py
+  └─ templates/core/
+
+products/
+  ├─ models.py          # Category, Product
+  ├─ views.py
+  ├─ urls.py
+  ├─ admin.py
+  └─ templates/products/
+
+blog/
+  ├─ models.py          # BlogCategory, BlogPost
+  ├─ views.py
+  ├─ urls.py
+  ├─ admin.py
+  └─ templates/blog/
+
+accounts/
+  ├─ models.py          # Profile
+  ├─ views.py           # register/login/logout/profile/edit
+  ├─ urls.py
+  └─ templates/accounts/
+
+templates/
+  ├─ base.html
+  ├─ navbar.html
+  └─ errors/404.html etc.
+
+static/
+  ├─ css/style.css
+media/
+  └─ products/, profiles/
+scripts/                     # optional scripts for populating data (create_blog_posts.py, populate_products.py)
+
+Models (summary & fields)
+products/models.py
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+class Product(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    affiliate_link = models.URLField()
+    image = models.ImageField(upload_to='products/', blank=True, null=True, default='products/default.jpeg')
+
+
+image is optional and has a default placeholder. Use {% if product.image %} in templates.
+
+blog/models.py
+class BlogCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    category = models.ForeignKey(BlogCategory, on_delete=models.CASCADE, related_name='posts')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+accounts/models.py
+from django.contrib.auth.models import User
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True, null=True)
+    profile_image = models.ImageField(upload_to='profiles/', default='profiles/default.jpg', blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
+
+
+A post_save signal auto-creates a Profile when a User is created.
+
+Admin
+
+Register models in admin.py to manage them through /admin/.
+
+# products/admin.py
+from django.contrib import admin
+from .models import Product, Category
+admin.site.register(Product)
+admin.site.register(Category)
+
+
+Same for blog and accounts.Profile.
+
+Views — behavioral summary
+core/views.py
+
+home(request):
+
+Fetches product_categories, blog_categories, paginates products and blogs (if implemented).
+
+Context example:
+
+{
+  'product_categories': product_categories,
+  'blog_categories': blog_categories,
+  'products': products,  # paginated Page object
+  'blogs': blogs,       # paginated Page object
+}
+
+
+contact(request):
+
+GET: renders contact form.
+
+POST: validates, creates Contact model instance, returns success/error message.
+
+search(request):
+
+Accepts q and type (products|blog).
+
+Returns results, search_type, query.
+
+products/views.py
+
+product_list(request):
+
+Optional filtering: q for text search; category query param for category filter.
+
+Uses Q(title__icontains=q) | Q(description__icontains=q).
+
+Returns products (QuerySet/paginated Page).
+
+product_detail(request, pk):
+
+get_object_or_404(Product, pk=pk) and render.
+
+blog/views.py
+
+blog_list(request):
+
+Optionally filter by category query param (search via category__name).
+
+Returns posts and categories and active_category.
+
+blog_detail(request, pk):
+
+get_object_or_404(BlogPost, pk=pk), provide recent_posts and categories.
+
+accounts/views.py
+
+register_view(request): create User, redirect to login.
+
+login_view(request): authenticate, call login(), ensure Profile exists.
+
+logout_view(request): logout() and redirect.
+
+profile_view(request) (login required): shows Profile.
+
+edit_profile_view(request) (login required): updates profile fields and profile_image.
+
+URLs — naming & namespaces
+
+affiliate_site/urls.py (main) includes each app with namespaces:
+
+path('', include('core.urls')),
+path('products/', include('products.urls', namespace='products')),
+path('blog/', include('blog.urls', namespace='blog')),
+path('accounts/', include('accounts.urls', namespace='accounts')),
+
+
+Each app urls.py should define app_name = 'products' / 'blog' / 'accounts'.
+
+Use namespaced reversing in templates:
+
+Products list: {% url 'products:product_list' %}
+
+Product detail: {% url 'products:product_detail' product.pk %}
+
+Blog list: {% url 'blog:blog_list' %}, blog detail: {% url 'blog:blog_detail' post.pk %}
+
+Accounts: {% url 'accounts:login' %}, {% url 'accounts:profile' %}
+
+Templates — conventions
+
+templates/base.html includes header, {% include 'navbar.html' %}, and {{ block content }}.
+
+Use {% load static %} at top if referencing static assets.
+
+When showing images: guard with {% if obj.image %}{{ obj.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}.
+
+For error templates, place under templates/errors/ and configure handlers in root urls.py:
+
+handler404 = 'core.views.handler404'
+handler500 = 'core.views.handler500'
+
+Pagination & grids
+
+Use Django Paginator in home/blog/product views. Example for 4 items per page (2×2 grid):
+
+from django.core.paginator import Paginator
+paginator = Paginator(queryset, 4)
+page = paginator.get_page(request.GET.get('page'))  # or product_page/blog_page separate params
+
+
+CSS: use .cards.grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px }.
+
+Search
+
+Central search endpoint: /search/?q=...&type=products or type=blog.
+
+Search uses icontains on title and description/content. For production use, consider adding a dedicated search (Elasticsearch / Postgres full-text / Django-Haystack).
+
+Scripts / Fixtures
+
+Place scripts in scripts/ or project root. Example populate_products.py:
+
+Must setup Django:
+
+import os, django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'affiliate_site.settings')
+django.setup()
+# then import models and create objects
+
+
+Scripts used earlier:
+
+category.py — create product categories
+
+blog_category.py — create blog categories and posts
+
+populate_products.py — create products (with image='products/default.jpeg' referencing MEDIA_ROOT/products/default.jpeg)
+
+Media & Static
+
+settings.py:
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+Development: in root urls.py add:
+
+from django.conf import settings
+from django.conf.urls.static import static
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+Put placeholder images in media/products/default.jpeg and static/images/default.jpg.
+
+Authentication & Profiles
+
+Use Django auth (User). The Profile model is OneToOneField(User).
+
+Add @receiver(post_save, sender=User) to auto-create profiles.
+
+When logging in, safe-guard by Profile.objects.get_or_create(user=user) to avoid RelatedObjectDoesNotExist for old users.
+
+Error handling & Custom error pages
+
+Templates under templates/errors/404.html etc.
+
+Handlers in main urls.py:
+
+handler404 = 'core.views.handler404'
+handler500 = 'core.views.handler500'
+handler403 = 'core.views.handler403'
+handler400 = 'core.views.handler400'
+
+
+Set DEBUG=False and ALLOWED_HOSTS=['localhost','127.0.0.1'] to test locally.
+
+Admin, Migrations & Common CLI
+
+Create superuser: python manage.py createsuperuser
+
+Make migrations: python manage.py makemigrations then python manage.py migrate
+
+Run dev server: python manage.py runserver
+
+Load fixtures: python manage.py loaddata filename.json if you use fixtures.
+
+Sample Workflow (from scratch)
+
+Create & activate venv.
+
+pip install -r requirements.txt (or at least django).
+
+python manage.py makemigrations && python manage.py migrate
+
+python manage.py createsuperuser
+
+Add default images to media/products/default.jpeg and media/profiles/default.jpg.
+
+Run scripts:
+
+python category.py (creates categories)
+
+python create_blog_posts.py (creates blog posts)
+
+python populate_products.py (creates products)
+
+Start server: python manage.py runserver
+
+Deployment notes (brief)
+
+Use Postgres for production, not SQLite.
+
+Serve static files with CDN or collectstatic + web server (nginx).
+
+Serve media via cloud storage (S3) or proper media static serving.
+
+Configure ALLOWED_HOSTS, secure SECRET_KEY, set DEBUG=False.
+
+Use HTTPS and set secure cookie flags and CSRF settings.
+
+Testing / Edge cases & gotchas
+
+If you add a non-null FK to an existing model, Django asks for a default; handle carefully. Use null=True for migration safety or supply a default category first.
+
+For Windows dev shells, pyreadline can break Django shell on Python 3.12 — run scripts directly or install pyreadline3.
+
+Always guard image.url access in templates.
+
+If you include namespace in include(), ensure the included urls.py has app_name = '...' set.
+
+Code Map — where to change things
+
+Models: products/models.py, blog/models.py, accounts/models.py
+
+Views: products/views.py, blog/views.py, core/views.py, accounts/views.py
+
+Templates: templates/ + app/templates/*/
+
+URLs: app urls.py and root affiliate_site/urls.py
+
+Static/CSS: static/css/style.css
+
+Media: media/ folder
+
+Quick reference: Context variables (templates)
+
+core/home.html:
+
+product_categories (QuerySet)
+
+blog_categories (QuerySet)
+
+products (Page or QuerySet) — if paginated, has .has_next/.number
+
+blogs (Page or QuerySet)
+
+products/product_list.html:
+
+products (QuerySet/Page)
+
+query (search term, optional)
+
+products/product_detail.html:
+
+product (Product instance)
+
+blog/blog_list.html:
+
+posts (QuerySet/Page)
+
+categories (QuerySet)
+
+active_category (string)
+
+blog/blog_detail.html:
+
+post (BlogPost instance)
+
+categories (QuerySet)
+
+recent_posts (QuerySet)
+
+accounts/profile.html:
+
+profile (Profile instance)
+
+user available from request
+
+Security & best practices checklist
+
+Use LoginRequiredMixin or @login_required for protected views.
+
+Escape user input (Django templates auto-escape by default).
+
+Validate external links before redirecting.
+
+Use environment variables for secrets/config (django-environ or os.environ).
+
+Limit file upload sizes and validate file types for images.
