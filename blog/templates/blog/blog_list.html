@@ -206,7 +206,6 @@
                                 </span>
                             </div>
                             <a href="{% url 'blog:blog_detail' post.pk %}" class="btn btn-outline">
-                                Read More
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
@@ -857,7 +856,16 @@
     display: flex;
     gap: 15px;
 }
-
+.blog-card .btn {
+    margin-top: 10px;
+    align-self: flex-start;
+    padding: 8px 15px;
+    border-radius: 6px;
+    background-color:white;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+}
 .stat {
     display: flex;
     align-items: center;
@@ -871,7 +879,7 @@
     align-items: center;
     gap: 8px;
     background: transparent;
-    color: var(--primary-color);
+    /* color: var(--primary-color); */
     border: 1px solid var(--primary-color);
     padding: 10px 20px;
     border-radius: var(--border-radius);

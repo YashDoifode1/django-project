@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',  # 👈 must come before 'django.contrib.admin'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +46,29 @@ INSTALLED_APPS = [
     'accounts'
 ]
 
+JAZZMIN_SETTINGS = {
+    "site_title": "Affiliate Admin",
+    "site_header": "Affiliate Dashboard",
+    "site_brand": "Affiliate Panel",
+    "welcome_sign": "Welcome to Affiliate Control Center",
+    "copyright": "Affiliate Site © 2025",
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Profile", "url": "/admin/accounts/profile/", "icon": "fas fa-user-circle"},
+    ],
+    "user_avatar": "accounts.Profile.profile_image",
+    # Icons
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "accounts.Profile": "fas fa-user-circle",
+        "products.Product": "fas fa-box-open",
+        "blog.Post": "fas fa-pen-nib",
+    },
+
+    # UI Customization
+    "theme": "darkly",  # or "flatly", "cyborg", etc.
+    "show_ui_builder": True,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
