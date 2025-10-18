@@ -31,3 +31,18 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+from django.contrib.auth.models import User
+from django.db import models
+from products.models import Product
+
+class SavedProduct(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_products')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='saved_by_users')
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+    def __str__(self):
+        return f"{self.user.username} saved {self.product.title}"
+

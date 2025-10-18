@@ -75,17 +75,36 @@ def blog_list(request):
     })
 
 
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import BlogPost, Comment
+from .forms import CommentForm
+from django.contrib.auth.decorators import login_required
+
 def blog_detail(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
-    
-    # Sidebar data
-    categories = BlogCategory.objects.annotate(post_count=Count('posts'))
-    recent_posts = BlogPost.objects.exclude(pk=pk).order_by('-created_at')[:5]
-    popular_tags = []  # Replace with actual tags if available
+    comments = post.comments.order_by('-created_at')
+
+    # Handle new comment
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.post = post
+                comment.user = request.user
+                comment.save()
+                return redirect(comment.post.get_absolute_url())
+        else:
+            return redirect('login')
+    else:
+        form = CommentForm()
+
+    recent_posts = BlogPost.objects.order_by('-created_at')[:5]
 
     return render(request, 'blog/blog_detail.html', {
         'post': post,
-        'categories': categories,
+        'comments': comments,
+        'form': form,
         'recent_posts': recent_posts,
-        'popular_tags': popular_tags,
     })
+

@@ -78,6 +78,9 @@ def product_list(request):
     return render(request, 'products/product_list.html', context)
 
 
+from django.shortcuts import render, get_object_or_404
+from .models import Product
+
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
 
@@ -94,11 +97,36 @@ def product_detail(request, pk):
                 name, value = spec.split(':', 1)
                 specifications_list.append({'name': name.strip(), 'value': value.strip()})
 
+    # ✅ Check if this product is saved by the current user
+    is_saved = False
+    if request.user.is_authenticated:
+        is_saved = product.saved_by_users.filter(id=request.user.id).exists()
+
     context = {
         'product': product,
         'related_products': related_products,
         'key_features_list': key_features_list,
         'specifications_list': specifications_list,
+        'is_saved': is_saved,  # <-- Add this for template logic
     }
 
     return render(request, 'products/product_detail.html', context)
+
+
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from .models import Product
+from .models import SavedProduct  # import the new model
+
+@login_required
+def toggle_save_product(request, product_id):
+    product = Product.objects.get(id=product_id)
+    saved_item, created = SavedProduct.objects.get_or_create(user=request.user, product=product)
+
+    if not created:
+        # If it already exists, remove (unsave)
+        saved_item.delete()
+        return JsonResponse({'status': 'unsaved'})
+    else:
+        # Newly saved
+        return JsonResponse({'status': 'saved'})
